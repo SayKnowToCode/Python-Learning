@@ -26,31 +26,36 @@ class Solution:
         
     def rodCuttingMemoization(self,n : int,values:List[int])->int:
         
-        dp = dict()
+        dp = [-1] * (n+1)
+        dp[0] = 0
+
         def recursion(n :int) -> int:
             if n == 0:
                 return 0
-            
-            if n < 0:
-                return -1
 
-            if n-values[0] in dp:
-                one = dp[n-values[0]]
-            else:
-                one = recursion(n - values[0])
+            one = two = three = -1
+            if n - values[0] >= 0:
+                if dp[n-values[0]] != -1:
+                    one = dp[n-values[0]]
+                else:
+                    one = recursion(n - values[0])
 
-            if n-values[1] in dp:
-                two = dp[n-values[1]]
-            else:
-                two = recursion(n - values[1])
+            if n-values[1] >= 0:
+                if dp[n-values[1]] != -1:
+                    two = dp[n-values[1]]
+                else:
+                    two = recursion(n - values[1])
 
-            if n-values[2] in dp:
-                three = dp[n-values[2]]
-            else:
-                three = recursion(n - values[2])
+            if n-values[2] >= 0:
+                if dp[n-values[2]] != -1:
+                    three = dp[n-values[2]]
+                else:
+                    three = recursion(n - values[2])
 
             if one == -1 and two == -1 and three == -1:
+                dp[n] = -1
                 return -1
+            
             dp[n] = 1 + max(one,two,three)
             return 1 + max(one,two,three)
 
